@@ -24,7 +24,7 @@ sourceCompatibility = 17
 targetCompatibility = 17
 
 group "io.kestra.plugin"
-description 'Plugin template for Kestra'
+description 'Plugin telegram for Kestra'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -52,9 +52,6 @@ dependencies {
 
     // kestra
     compileOnly group: "io.kestra", name: "core", version: kestraVersion
-
-    // libs included in the final jar
-    api group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 }
 
 
@@ -90,6 +87,11 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
     testImplementation "org.hamcrest:hamcrest:2.2"
     testImplementation "org.hamcrest:hamcrest-library:2.2"
+
+    testImplementation group: 'com.icegreen', name: 'greenmail-junit5', version: '2.0.0'
+    testImplementation "io.micronaut:micronaut-http-client"
+    testImplementation "io.micronaut:micronaut-http-server-netty"
+    testImplementation "io.micronaut.rxjava2:micronaut-rxjava2-http-client"
 }
 
 /**********************************************************************************************************************\
@@ -110,8 +112,8 @@ jar {
     manifest {
         attributes(
                 "X-Kestra-Name": project.name,
-                "X-Kestra-Title": "Template",
-                "X-Kestra-Group": project.group + ".templates",
+                "X-Kestra-Title": "telegram-plugin",
+                "X-Kestra-Group": project.group + ".telegram",
                 "X-Kestra-Description": project.description,
                 "X-Kestra-Version": project.version
         )
@@ -121,8 +123,8 @@ jar {
 pom {
     developers {
         developer {
-            id "tchiotludo"
-            name "Ludovic Dehon"
+            id "moadibfr"
+            name "Martin Guibert"
         }
     }
 }
