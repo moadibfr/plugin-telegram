@@ -1,15 +1,25 @@
-# Kestra Plugin Template
+# Kestra Plugin Telegram
 
 <p align="center">
   <img width="460" src="https://kestra.io/logo.svg"  alt="Kestra workflow orchestrator" />
 </p>
 
-> A template for creating plugin for Kestra
+> A plugin to send telegram message from kestra
 
-This repository is meant to serve as a general template for how to set up new plugin for 
-[Kestra](https://github.com/kestra-io/kestra). In general, setting up a new plugin should 
-take only a few minutes; use this repository as a way of finding example files to ensure 
-that you've set up the plugin correctly.
+```yaml
+id: hello-telegram
+namespace: dev
+inputs:
+  - name: user
+    type: STRING
+tasks: 👋
+  - id: telegram
+    type: io.kestra.plugin.telegram.TelegramBotSend
+    token: XXXXXXX
+    channel: "0000000"
+    payload: Hey there, {{ inputs.user }}
+```
+This plugin uses [Telegram Bot API](https://core.telegram.org/bots/api), please use [telegram documentation](https://core.telegram.org/bots) to create a bot and get a token.
 
 ## Documentation
 * The official Kestra documentation can be found under: [kestra.io](https://kestra.io)
