@@ -75,17 +75,14 @@ public class TelegramSend extends Task implements RunnableTask<VoidOutput> {
     public VoidOutput run(RunContext runContext) throws Exception {
         Logger logger = runContext.logger();
 
-        TelegramBotImpl.TelegramBotImplBuilder clientBuilder = TelegramBotImpl.builder()
+        TelegramBot client = TelegramBotImpl.builder()
                 .logger(logger)
                 .destinationId(runContext.render(this.channel))
-                .apiToken(runContext.render(this.token));
-
-        clientBuilder.client(client(
-                runContext,
-                runContext.render(Objects.requireNonNullElse(this.endpointOverride, TELEGRAMAPI_BASE_URL))
-        ));
-
-        TelegramBot client = clientBuilder.build();
+                .apiToken(runContext.render(this.token))
+                .client(client(
+                        runContext,
+                        runContext.render(Objects.requireNonNullElse(this.endpointOverride, TELEGRAMAPI_BASE_URL))
+                )).build();
 
         String rendered = runContext.render(payload);
         logger.debug("sending {}", rendered);
