@@ -2,6 +2,7 @@ package io.kestra.plugin.telegram;
 
 import io.kestra.core.runners.RunContext;
 import io.kestra.core.runners.RunContextFactory;
+import io.kestra.plugin.telegram.api.dto.TelegramMessage;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -10,13 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalToObject;
 
 /**
  * This test will only test the main task, this allow you to send any input
  * parameters to your task and test the returning behaviour easily.
  */
 @MicronautTest
-class TelegramBotSendTest {
+class TelegramSendTest {
 
     @Inject
     private ApplicationContext applicationContext;
@@ -31,16 +33,20 @@ class TelegramBotSendTest {
         EmbeddedServer embeddedServer = applicationContext.getBean(EmbeddedServer.class);
         embeddedServer.start();
 
-        TelegramBotSend task = TelegramBotSend.builder()
+        String message = "Hello";
+        String channel = "channel";
+        String token = "token";
+
+        TelegramSend task = TelegramSend.builder()
                 .endpointOverride(embeddedServer.getURL().toString())
-                .token("token")
-                .channel("channel")
-                .payload("Hello")
+                .token(token)
+                .channel(channel)
+                .payload(message)
                 .build();
         task.run(runContext);
 
-        assertThat(FakeTelegramController.token, containsString("token"));
-        assertThat(FakeTelegramController.chatId, containsString("channel"));
-        assertThat(FakeTelegramController.text, containsString("Hello"));
+        assertThat(FakeTelegramController.token, containsString(token));
+        assertThat(FakeTelegramController.message, equalToObject(new TelegramMessage(channel, message)));
+
     }
 }

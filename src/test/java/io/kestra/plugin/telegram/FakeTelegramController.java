@@ -1,22 +1,22 @@
 package io.kestra.plugin.telegram;
 
+import io.kestra.plugin.telegram.api.dto.TelegramBotApiResponse;
+import io.kestra.plugin.telegram.api.dto.TelegramMessage;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.Post;
 
 @Controller()
 public class FakeTelegramController {
 
     public static String token;
-    public static String chatId;
-    public static String text;
+    public static TelegramMessage message;
 
-    @Get("/bot{token}/sendMessage")
-    public HttpResponse<String> post(String token, @QueryValue String chat_id, @QueryValue String text) {
+    @Post("/bot{token}/sendMessage")
+    public HttpResponse<TelegramBotApiResponse> post(String token, @Body TelegramMessage message) {
         FakeTelegramController.token = token;
-        FakeTelegramController.chatId = chat_id;
-        FakeTelegramController.text = text;
-        return HttpResponse.ok("ok");
+        FakeTelegramController.message = message;
+        return HttpResponse.ok(new TelegramBotApiResponse(true, message));
     }
 }
